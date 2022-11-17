@@ -32,10 +32,13 @@ mongoose.connect(
 app.get("/retrieveMessages/:username", async (req, res) => {
   try {
     const username = req.params.username;
+    if (req.headers.authorization) {
+      const messages = await Message.find({ username: username });
 
-    const messages = await Message.find({ usernmae: username });
-
-    res.send({ data: messages, success: true });
+      res.send({ data: messages, success: true });
+    }else{
+      res.send({ success: false})
+    }
   } catch (e) {
     res.send(e);
   }
@@ -58,7 +61,7 @@ app.post("/createMessage", async (req, res) => {
       type: req.body.type,
     });
     const result = await message.save();
-    res.send(result);
+    res.send({ result, success: true });
   } catch (e) {
     res.send(e);
   }

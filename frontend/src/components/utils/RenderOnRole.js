@@ -5,6 +5,17 @@ import { useEffect } from "react";
 const RenderOnRole = ({ roles, children }) => {
   const { keycloak } = useKeycloak();
   let user = '';
+
+  // useEffect(()=>{
+  //   axios.post(
+  //     'https://localhost:5000/createUser',user,
+  //     {
+  //       headers: {
+  //         Authorization:keycloak.token,
+  //       },
+  //     }
+  //   );
+  // })
  
   if (keycloak.authenticated) {
     var decoded = jwt_decode(keycloak.token);

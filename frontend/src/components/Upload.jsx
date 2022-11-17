@@ -1,4 +1,4 @@
-import React,{ Component } from "react";
+import React, { Component } from "react";
 import Box from "@mui/material/Box";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Button from "@mui/material/Button";
@@ -11,12 +11,13 @@ import InputLabel from "@mui/material/InputLabel";
 import Divider from "@mui/material/Divider";
 import RenderOnRole from "./utils/RenderOnRole";
 import CryptoJS from "crypto-js";
+import axios from "axios";
 
 class UploadMessage extends Component {
   constructor(props) {
     super(props);
     this.state = { description: "", type: "" };
-    this.fileInput = React.createRef()
+    this.fileInput = React.createRef();
   }
 
   handleChange = (e) => {
@@ -37,27 +38,39 @@ class UploadMessage extends Component {
       "secret key 123"
     ).toString();
 
-    console.log("encrypted Data")
+    console.log("encrypted Data");
     console.log(ciphertext);
 
-    
     // Decrypt
     var bytes = CryptoJS.AES.decrypt(ciphertext, "secret key 123");
     var decryptedData = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
 
-    console.log("decypted Data")
+    console.log("decypted Data");
     console.log(decryptedData);
     // this.props.onAdd(data);
 
-    // const date = {
+    const data = {
+      name: this.props.name,
+      username: this.props.username,
+      description: ciphertext,
+      type: "message",
+    };
 
-    // }
-    
+    console.log(data);
+    axios.post('https://localhost:5000/createMessage',data,{
+            headers: {
+              Authorization:this.props.token,
+            },
+          }).then((response) => {
+            if(response.data.success){
+              this.setState({description:""})
+            }
+          })
   };
 
   handleFile = () => {
-      this.setState({description:this.fileInput.current.files[0].name})
-  }
+    this.setState({ description: this.fileInput.current.files[0].name });
+  };
 
   render() {
     return (
@@ -103,7 +116,14 @@ class UploadMessage extends Component {
                       endIcon={<CloudUploadIcon />}
                     >
                       Upload
-                      <input hidden accept="image/*" ref={this.fileInput} onChange={this.handleFile} multiple type="file" />
+                      <input
+                        hidden
+                        accept="image/*"
+                        ref={this.fileInput}
+                        onChange={this.handleFile}
+                        multiple
+                        type="file"
+                      />
                     </Button>
                   </RenderOnRole>
                   <Button

@@ -1,5 +1,6 @@
 import jwt_decode from "jwt-decode";
 import { useKeycloak } from "@react-keycloak/web";
+import { useEffect } from "react";
 
 const RenderOnRole = ({ roles, children }) => {
   const { keycloak } = useKeycloak();

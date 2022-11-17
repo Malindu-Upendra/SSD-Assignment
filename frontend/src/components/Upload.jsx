@@ -26,14 +26,14 @@ class UploadMessage extends Component {
 
   onSubmit = (event) => {
     event.preventDefault();
-    const data = {
-      description: this.state.description,
-      type: this.state.type,
-    };
+    // const data = {
+    //   description: this.state.description,
+    //   type: this.state.type,
+    // };
 
     //Encrtypt
     const ciphertext = CryptoJS.AES.encrypt(
-      JSON.stringify(data),
+      JSON.stringify(this.state.description),
       "secret key 123"
     ).toString();
 
@@ -47,9 +47,11 @@ class UploadMessage extends Component {
 
     console.log("decypted Data")
     console.log(decryptedData);
-    this.props.onAdd(data);
+    // this.props.onAdd(data);
 
-  
+    // const date = {
+
+    // }
     
   };
 
